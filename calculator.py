@@ -4,6 +4,12 @@ window = Tk()
 
 FONT = ("arial", 30)
 input_text: str = ""
+text_str = StringVar
+
+special_symbols = {"\u00F7": "/", "\u00D7": "*"}
+for key in special_symbols.keys():
+    key.replace(key, special_symbols[key])
+    print(key)
 
 
 def write(number: str) -> None:
@@ -12,8 +18,13 @@ def write(number: str) -> None:
     label.config(text=input_text)
 
 
-def output() -> None:
+def output(special_symbols) -> None:
     global input_text
+    for key in special_symbols.keys():
+        if key in input_text:
+            print(input_text)
+            input_change = input_text.replace(key, special_symbols[key])
+            input_text = input_change
     label.config(text=str(eval(input_text)))
     input_text = str(eval(input_text))
 
@@ -22,6 +33,18 @@ def clear() -> None:
     global input_text
     input_text = ""
     label.config(text="")
+
+
+def exponentiation() -> None:
+    global input_text
+    input_text = str(float(input_text)**2)
+    label.config(text=input_text)
+
+
+def elementalization() -> None:
+    global input_text
+    input_text = str(float(input_text)**(1/2))
+    label.config(text=input_text)
 
 
 window.title("Calculator")
@@ -34,11 +57,12 @@ label = Label(window, font=FONT)
 label.grid(row=0, column=0, columnspan=3)
 
 
+
 Button(window, text="C", font=FONT, bd=0, command=clear).grid(row=2, column=0)
-Button(window, text="x\u00b2", font=FONT, bd=0).grid(row=2, column=1)
-Button(window, text="\u221ax", font=FONT, bd=0).grid(row=2, column=2)
-Button(window, text="\u00F7", font=FONT, bd=0).grid(row=2, column=3)
-Button(window, text="\u00D7", font=FONT, bd=0).grid(row=3, column=3)
+Button(window, text="x\u00b2", font=FONT, bd=0, command=exponentiation).grid(row=2, column=1)
+Button(window, text="\u221ax", font=FONT, bd=0, command=elementalization).grid(row=2, column=2)
+Button(window, text="\u00F7", font=FONT, bd=0, command=lambda: write("\u00F7")).grid(row=2, column=3)
+Button(window, text="\u00D7", font=FONT, bd=0, command=lambda: write("\u00D7")).grid(row=3, column=3)
 Button(window, text="-", font=FONT, bd=0, command=lambda: write("-")).grid(row=4, column=3)
 Button(window, text="+", font=FONT, bd=0, command=lambda: write("+")).grid(row=5, column=3)
 
@@ -57,6 +81,6 @@ Button(window, text="0", font=FONT, bd=0, command=lambda: write("0")).grid(row=6
 Button(window, text="=",
        font=("arial", 30),
        bd=0,
-       command=output).grid(row=6, column=2, columnspan=3)
+       command=lambda: output(special_symbols)).grid(row=6, column=2, columnspan=3)
 
 window.mainloop()
