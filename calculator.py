@@ -7,10 +7,6 @@ input_text: str = ""
 text_str = StringVar
 
 special_symbols = {"\u00F7": "/", "\u00D7": "*"}
-for key in special_symbols.keys():
-    key.replace(key, special_symbols[key])
-    print(key)
-
 
 def write(number: str) -> None:
     global input_text
@@ -22,7 +18,6 @@ def output(special_symbols) -> None:
     global input_text
     for key in special_symbols.keys():
         if key in input_text:
-            print(input_text)
             input_change = input_text.replace(key, special_symbols[key])
             input_text = input_change
     label.config(text=str(eval(input_text)))
@@ -57,26 +52,21 @@ label = Label(window, font=FONT)
 label.grid(row=0, column=0, columnspan=3)
 
 
-
 Button(window, text="C", font=FONT, bd=0, command=clear).grid(row=2, column=0)
 Button(window, text="x\u00b2", font=FONT, bd=0, command=exponentiation).grid(row=2, column=1)
 Button(window, text="\u221ax", font=FONT, bd=0, command=elementalization).grid(row=2, column=2)
-Button(window, text="\u00F7", font=FONT, bd=0, command=lambda: write("\u00F7")).grid(row=2, column=3)
-Button(window, text="\u00D7", font=FONT, bd=0, command=lambda: write("\u00D7")).grid(row=3, column=3)
-Button(window, text="-", font=FONT, bd=0, command=lambda: write("-")).grid(row=4, column=3)
-Button(window, text="+", font=FONT, bd=0, command=lambda: write("+")).grid(row=5, column=3)
 
-Button(window, text="7", font=FONT, bd=0, command=lambda: write("7")).grid(row=3, column=0)
-Button(window, text="8", font=FONT, bd=0, command=lambda: write("8")).grid(row=3, column=1)
-Button(window, text="9", font=FONT, bd=0, command=lambda: write("9")).grid(row=3, column=2)
-Button(window, text="4", font=FONT, bd=0, command=lambda: write("4")).grid(row=4, column=0)
-Button(window, text="5", font=FONT, bd=0, command=lambda: write("5")).grid(row=4, column=1)
-Button(window, text="6", font=FONT, bd=0, command=lambda: write("6")).grid(row=4, column=2)
-Button(window, text="1", font=FONT, bd=0, command=lambda: write("1")).grid(row=5, column=0)
-Button(window, text="2", font=FONT, bd=0, command=lambda: write("2")).grid(row=5, column=1)
-Button(window, text="3", font=FONT, bd=0, command=lambda: write("3")).grid(row=5, column=2)
-Button(window, text=".", font=FONT, bd=0, command=lambda: write(".")).grid(row=6, column=0)
-Button(window, text="0", font=FONT, bd=0, command=lambda: write("0")).grid(row=6, column=1)
+
+numbers = {".": (6, 0), "0": (6, 1),
+           "1": (5, 0), "2": (5, 1), "3": (5, 2), "+": (5, 3),
+           "4": (4, 0), "5": (4, 1), "6": (4, 2), "-": (4, 3),
+           "7": (3, 0), "8": (3, 1), "9": (3, 2), "\u00D7": (3, 3),
+           "\u00F7": (2, 3)
+           }
+
+for keys, values in numbers.items():
+    Button(window, text=keys, font=FONT, bd=0, command=lambda x=keys: write(x)).grid(row=values[0], column=values[1])
+
 
 Button(window, text="=",
        font=("arial", 30),
